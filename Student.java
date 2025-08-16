@@ -1,64 +1,54 @@
-public class Student {
-    private String name;
-    private String address;
-    private int numCourse = 0;
-    //define array variable
+public class Student extends Person {
+
+    private int numCourses = 0;
     private String[] courses = new String[30];
     private int[] grades = new int[30];
 
-    //Constructor
-    public Student(String name, String address){
-        this.name = name;
-        this.address = address;
-    }
+    public Student(String name, String address) {
+        super(name, address);
 
-    public String getName() {
-        return name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    @Override
-    
-    public String toString() {
-        // TODO Auto-generated method stub
-        return this.name + "(" + getAddress() + ")";
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name must not be null or blank");
+        }
+        if (address == null || address.isBlank()) {
+            throw new IllegalArgumentException("Address must not be null or blank");
+        }
     }
 
     public void addCourseGrade(String course, int grade) {
-        if(numCourse<30){
-            courses[numCourse] = course;
-            grades[numCourse] = grade;
-            numCourse++;
-        }else{
-            System.out.println("Cannot add more than 30 course.");
+        if (course == null || course.isBlank()) {
+            throw new IllegalArgumentException("Course name must not be null or blank");
+        }
+        if (numCourses >= courses.length) {
+            throw new IllegalStateException("Cannot add more courses");
+        }
+        if (grade < 0 || grade > 100) {
+            throw new IllegalArgumentException("Grade must be between 0 and 100");
+        }
+        courses[numCourses] = course;
+        grades[numCourses] = grade;
+        numCourses++;
+    }
+
+    public void printGrades() {
+        for (int i = 0; i < numCourses; i++) {
+            System.out.println(courses[i] + ": " + grades[i]);
         }
     }
 
-    public void printGrades(){
-        System.out.print(this.name+" ");
-        for(int i=0; i<numCourse; i++){
-            System.out.print(courses[i] + ":" + grades[i]);
-            if (i<numCourse - 1) System.out.print(", ");
+    public double getAverageGrade() {
+        if (numCourses == 0) {
+            return 0;
         }
-        System.out.println();
+        int sum = 0;
+        for (int i = 0; i < numCourses; i++) {
+            sum += grades[i];
+        }
+        return (double) sum / numCourses;
     }
 
-    public double getAverageGrade(){
-        if(numCourse==0) return 0.0;
-        int sum = 0 ;
-        for(int i=0; i<numCourse; i++){
-           sum += grades[i];
-        }
-        return (double)sum/numCourse;
-
+    @Override
+    public String toString() {
+        return "Student: " + super.toString();
     }
-
-
 }
